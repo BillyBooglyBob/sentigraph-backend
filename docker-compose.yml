@@ -1,0 +1,23 @@
+services:
+  web:
+    build: ./sentigraph_backend
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./sentigraph_backend/:/usr/src/sentigraph_backend/
+    ports:
+      - 8000:8000
+    env_file:
+      - ./.env.dev
+    depends_on:
+      - db
+  db:
+    image: postgres:latest
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=postgresuser
+      - POSTGRES_PASSWORD=postgrespassword
+      - POSTGRES_DB=sentigraph_db
+  
+volumes:
+  postgres_data:

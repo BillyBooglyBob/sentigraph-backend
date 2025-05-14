@@ -1,0 +1,178 @@
+Activate/deactivate venv environment for Python backend
+- source env/bin/activate
+- deactivate
+
+FRONTEND:
+- Comparison charts
+- Chart
+  - API send data for every single day for a time range
+  - Frontend manipulates for the timeframe (such as imputation & aggregation/MA)`
+
+BACKEND:
+Superuser:
+- Email: bobbyBob@gmail.com
+- Password: BreakingPrice
+
+test users:
+- email: a@gmail.com
+- password: abcABC11
+
+Development:
+- inside backend directory
+- docker-compose up -d to run the containers
+
+- Create new app
+  - docker-compose exec web python manage.py startapp <appname>
+  - Add to INSTALLED_APPS in settings.py 
+
+- give permission to save
+  - docker-compose exec web bash
+  - chown -R 1000:1000 /usr/src/sentigraph_backend/
+
+- install new dependencies, need to rebuild
+  - docker-compose up --build
+- made changes to files, need to migrate (can do so with entrypoint.sh)
+  - docker-compose up -d
+
+
+Sentiment
+- API needs to provide all the data in one go. 
+- date in format "90d", need to make relevant change to frontend
+  - it can only select last 90d and what not, 90d from when is based
+  on the data.
+- Learn how to load dataset into database
+- Verify data date range so we can at least do some analysis
+- Do a small chunk first
+- sentiment api not working, how to solve
+  - Check sentiment analysis is being done
+  - Find where the error occurred (possible location is date equality check)
+- Need to reset database since many cached data are wrong
+- Frontend intergration
+  - Date range selection change
+  - Aspect & Multiple companies setup, a selector is missing (I think its aspect)
+  - Redux setup (redux query)
+- reinstate check cache for sentiment api search after all the testing are good
+
+Auth
+- user register, login and logout
+- connect to frontend
+  - Use Tanstack for request
+    - Remove username from all requests
+  - Setup Redux to use auth data in multiple locations
+    - use login state to change register/logout in the profile
+    - use permission to hide admin section of navbar
+    1. Setup backend API to retrieve user info
+    2. Setup redux toolkit to store user info
+    3. Use permission for info hiding
+- user's personal list of companies tracked
+  - support CRUD operations
+  1. Learn how to create the API to add companies to a particular user
+  2. Test API 
+  3. Implement into code
+  4. Learn how to delete
+  5. Test API
+  6. Implement into code
+
+- Need bearer token in the request header else won't work.
+
+
+Admin
+- CRUD operation on users
+  - (GOOD) read users (Only allow data for user with admin permission) 
+  - (GOOD) delete user
+  - (GOOD) create user
+  - (GOOD) update user (need to implement profile page, will use same set of API)
+
+  - create and update seems to have some problem with actually logging in 
+    and saving the password correctly
+- Implement one operation at a time
+  - Implement in the backend
+  - Test API
+  - Connect to frontend
+
+
+- user profile page (can modify the page)
+
+- Need to send data like this for create and update user:
+{
+  "email": "abc@example.com",
+  "password1": "1234",
+  "password2": "1234"
+}
+
+example fetch call:
+fetch("/users/", {
+  method: "POST",
+  headers: {
+    "Authorization": "Bearer <token>",
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    email: "abc@example.com",
+    password1: "1234",
+    password2: "1234"
+  })
+})
+
+
+Postman testing:
+- Login first to get access token
+- When doing authorised calls, copy token into Authentication -> Bearer Token
+- Then can make authorised calls
+
+
+- Faulty sentiment analysis
+  - presumably due to case sensitivity.
+
+
+
+
+
+
+
+- Set up django backend
+- Run django in docker
+- Set up PostgreSQL with mocked data (real data later since too big)
+- Create DB schema
+- Sentiment API
+  - All data for a company
+    - # listings
+    - Overall sentiment
+  - Sentiment algorithm
+  - Sentiment analysis on an aspect of the company
+    - Perform analysis, check if aspect for company already exists
+    - Also saving the result for future reference
+  - Merge data for multiple aspects
+  - Merge data for multiple companies
+- Integrate with frontend
+  - companies/[id]
+  - companies-comparison
+- Auth
+  - User schema (with role/permission)
+  - API
+    - register 
+      - JWT token
+      - password encryption
+    - login
+    - add/remove companies
+- Admin
+  - API
+    - Permission check (user is admin)
+    - Return all users
+    - CRUD operations
+
+Deployment:
+- Split project into two repos:
+  - frontend
+  - backend
+- Deploy backend on a VPS
+  - Separate docker-compose.prod.yml
+    - add nginx
+    - use gunicorn (install and use)
+  - Setup nginx
+    - Change allowed domains so backend can be exposed to the actual server
+  - Setup .env.prod 
+- Deploy frontend on Vercel
+
+
+
