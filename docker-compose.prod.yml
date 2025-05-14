@@ -1,0 +1,36 @@
+services:
+  nginx:
+    build: ./nginx
+    ports:
+      - 1337:80
+    depends_on:
+      - web
+  web:
+    build: ./sentigraph_backend
+    command: gunicorn sentigraph_backend.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - ./sentigraph_backend/:/usr/src/sentigraph_backend/
+    expose:
+      - 8000
+    env_file:
+      - ./.env.dev
+    depends_on:
+      - db
+  db:
+    image: postgres:latest
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=postgresuser
+      - POSTGRES_PASSWORD=postgrespassword
+      - POSTGRES_DB=sentigraph_db
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - /var/certbot/conf:/etc/letsencrypt/:rw
+      - /var/certbot/www/:/var/www/certbot/:rw
+    depends_on:
+      - nginx
+
+volumes:
+  postgres_data:

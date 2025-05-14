@@ -171,8 +171,10 @@ Deployment:
     - use gunicorn (install and use)
   - Setup nginx
     - Change allowed domains so backend can be exposed to the actual server
+  - Configure certbot for ssh
   - Setup .env.prod 
+  - 
+  - Create super user to test admin
+  -
+
 - Deploy frontend on Vercel
-
-
-
