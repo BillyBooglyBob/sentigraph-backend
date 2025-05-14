@@ -9,7 +9,8 @@ def ensure_company(company_name, tweets):
     Ensure that a company exists in the database.
     If it does not exist, create it and save all tweets related to the company.
     """
-    company_obj = Company.objects.get_or_create(
+    # Need to do this to unpack the returned tuple
+    company_obj, _ = Company.objects.get_or_create(
         name__iexact=company_name, defaults={"name": company_name}
     )
     if not ClassifiedTweet.objects.filter(company=company_obj).exists():
