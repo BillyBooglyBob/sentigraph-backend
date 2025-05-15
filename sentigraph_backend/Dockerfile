@@ -15,6 +15,14 @@ RUN pip install --upgrade pip
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
+# Pre-download Hugging Face models
+RUN python -c "from transformers import AutoTokenizer, AutoModelForSequenceClassification; \
+AutoTokenizer.from_pretrained('yangheng/deberta-v3-base-absa-v1.1'); \
+AutoModelForSequenceClassification.from_pretrained('yangheng/deberta-v3-base-absa-v1.1')"
+
+RUN python -c "from transformers import pipeline; \
+pipeline('sentiment-analysis', model='cardiffnlp/twitter-xlm-roberta-base-sentiment', tokenizer='cardiffnlp/twitter-xlm-roberta-base-sentiment')"
+
 # Execute the entrypoint file
 COPY ./entrypoint.sh .
 
