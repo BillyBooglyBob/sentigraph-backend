@@ -177,4 +177,10 @@ Deployment:
   - Create super user to test admin
   -
 
+- is docker-compose.prod.yml correct
+- is extra docker file necessary
+- is certbot configured correctly
+- also push to github and pull in droplet
+
+
 - Deploy frontend on Vercel
