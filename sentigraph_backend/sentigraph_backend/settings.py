@@ -62,6 +62,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://209.38.95.111",
     "http://209.38.95.111:1337",
+    "http://209.38.95.111:3000"
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -70,6 +71,7 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
     "http://209.38.95.111",
     "http://209.38.95.111:1337",
+    "http://209.38.95.111:3000"
 ]
 
 CORS_ORIGINS_WHITELIST = [
@@ -78,6 +80,7 @@ CORS_ORIGINS_WHITELIST = [
     "http://localhost:3000",
     "http://209.38.95.111",
     "http://209.38.95.111:1337",
+    "http://209.38.95.111:3000"
 ]
 
 # CORS_ALLOW_ALL_ORIGINS = True
